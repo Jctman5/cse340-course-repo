@@ -53,3 +53,48 @@ VALUES
 (3,'Blood Donation Event','Coordinate community blood donations.','Nampa, ID','2026-09-15'),
 (3,'School Supply Giveaway','Provide backpacks and school supplies.','Caldwell, ID','2026-09-30'),
 (3,'Holiday Toy Drive','Collect toys for local children.','Eagle, ID','2026-10-15');
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(100) NOT NULL UNIQUE
+);
+CREATE TABLE project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES project(project_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES category(category_id)
+        ON DELETE CASCADE
+);
+INSERT INTO category (category_name)
+VALUES
+('Environmental'),
+('Educational'),
+('Community Service'),
+('Health and Wellness');
+INSERT INTO project_category (project_id, category_id)
+VALUES
+(1,1),
+(2,3),
+(3,1),
+(4,3),
+(5,1),
+
+(6,2),
+(7,1),
+(8,2),
+(9,1),
+(10,2),
+
+(11,3),
+(12,4),
+(13,4),
+(14,2),
+(15,3);

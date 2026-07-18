@@ -4,6 +4,7 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import * as projectsModel from "./src/models/projects.js";
+import * as categoriesModel from "./src/models/categories.js";
 // Define the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
@@ -50,9 +51,25 @@ app.get("/projects", async (req, res) => {
     });
 
 });
-app.get('/categories', async (req, res) => {
-  const title = 'Categories';
-  res.render('categories',{ title });
+app.get("/categories", async (req, res) => {
+
+    try {
+
+        const result = await categoriesModel.getAllCategories();
+
+        res.render("categories", {
+            title: "Service Project Categories",
+            categories: result.rows
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).send("Server Error");
+
+    }
+
 });
 
 app.listen(PORT, async () => {
