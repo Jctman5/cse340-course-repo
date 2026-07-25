@@ -10,7 +10,8 @@ async function getAllCategories() {
         ORDER BY category_name;
     `;
 
-    return await db.query(sql);
+    const result = await db.query(sql);
+    return result.rows;
 
 }
 
