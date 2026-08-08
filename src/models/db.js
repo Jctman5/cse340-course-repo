@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-
+import dns from 'node:dns';
 /**
  * Connection pool for PostgreSQL database.
  * 
@@ -15,6 +15,9 @@ const pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {
         rejectUnauthorized: false
+    },
+    lookup: (hostname, options, callback) => {
+        dns.lookup(hostname, { family: 4 }, callback);
     }
 });
 

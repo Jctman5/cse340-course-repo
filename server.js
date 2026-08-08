@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -26,7 +25,16 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
 }));
+// Middleware to make NODE_ENV available to all templates
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
 
+    res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
 // Use flash message middleware
 app.use(flash);
 // Allow Express to receive and process common POST data
@@ -53,11 +61,6 @@ app.use((req, res, next) => {
     next(); // Pass control to the next middleware or route
 });
 
-// Middleware to make NODE_ENV available to all templates
-app.use((req, res, next) => {
-    res.locals.NODE_ENV = NODE_ENV;
-    next();
-});
 
 // Use the imported router to handle routes
 app.use(router);
